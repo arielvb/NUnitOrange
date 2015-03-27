@@ -1,7 +1,13 @@
 ﻿namespace NUnitOrange.HTML
 {
+    /// <summary>
+    /// Creates a summary for the executive summary
+    /// </summary>
     internal class FolderLevelPage
     {
+        /// <summary>
+        /// Main source written to the executive-summary level report
+        /// </summary>
         internal static string Base
         {
             get
@@ -9,7 +15,7 @@
                 return @"<!DOCTYPE html>
                         <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'> 
                         <!--
-	                        NUnit Orange Library [Folder Summary] v1.5 | http://relevantcodes.com/nunit-orange-nunit-html-report-generator/ | https://github.com/relevantcodes/
+	                        NUnit Orange Library [Folder Summary] v2.0 | http://relevantcodes.com/nunit-orange-nunit-html-report-generator/ | https://github.com/relevantcodes/
                             Owners:  Anshoo Arora
                             Contributor:  Shaiju Janardhanan
                         --> 
@@ -29,9 +35,9 @@
 			                        .header { font-size: 14px; margin-top: -1px; padding-bottom: 15px;}
 			                        #title { margin-top: 30px; }
                                     .title-orange { color: #ef5f3c; font-family: Montserrat; }
-			                        .header .name {color: #bbb;float: right;font-family: Montserrat; font-size: 13px; margin-top: -20px;}
+			                        .header .name {color: #bbb;float: right;font-size: 15px; margin-top: -20px;}
 			                        /*---:[ dashboard ]:---*/
-			                        #dashboard {background: #f9f9f9;border-bottom: 1px solid #ccc;margin: 20px 0 40px;}
+			                        #dashboard {background: #f9f9f9;border-bottom: 1px solid #ddd;margin: 20px 0 40px;}
 			                        .dashboard {padding: 20px 0 0;text-align: center;}
 			                        .dashboard > div {display: inline-block;}
 			                        /*---:[ content ]:---*/
@@ -42,7 +48,7 @@
 			                        .orange-table td:last-child {min-width: 250px;}
 			                        .totals-row td {font-size: 14px;padding: 8px 12px;}
 			                        .progress {margin-bottom: 0;}
-			                        .label {font-size: 13px;padding: 2px 9px;text-transform:capitalize;}
+			                        .label {font-size: 13px;font-weight:600;padding: 2px 7px;text-transform:capitalize;}
 			                        .failed > .label, .failure > .label {background-color: #d9534f;}
 			                        .passed > .label, .success > .label {background-color: #5cb85c;}
 		                        </style>
@@ -164,6 +170,9 @@
             }
         }
 
+        /// <summary>
+        /// Each row represents an input file from NUnit
+        /// </summary>
         public static string Row
         {
             get

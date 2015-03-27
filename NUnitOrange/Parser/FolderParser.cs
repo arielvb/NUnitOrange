@@ -8,10 +8,21 @@
     using System.Xml;
     using System.Text.RegularExpressions;
 
+    /// <summary>
+    /// Creates executive level summary from all NUnit XML run files
+    /// </summary>
     internal class FolderParser
     {
+        /// <summary>
+        /// Path to the directory where all XML files are kept
+        /// </summary>
         private string dir = "";
 
+        /// <summary>
+        /// Set the Target folder where all XML files are kept
+        /// </summary>
+        /// <param name="TargetDirectory"></param>
+        /// <returns>FolderParser</returns>
         public FolderParser SetFolder(string TargetDirectory)
         {
             this.dir = TargetDirectory;
@@ -19,12 +30,16 @@
             return this;
         }
 
+        /// <summary>
+        /// Builds the folder-level / executive-summary report from all input XML files
+        /// </summary>
         public void BuildReport()
         {
             List<string> allFiles = Directory.GetFiles(dir, "*.*", SearchOption.TopDirectoryOnly)
                             .Where(s => s.ToLower().EndsWith("xml"))
                             .ToList();
 
+            // if no XML files, end process
             if (allFiles.Count == 0)
             {
                 Console.WriteLine("[INFO] No XML files were found in the given location. Exiting..");
@@ -32,12 +47,17 @@
             }
 
             TestSuiteParser fileParser = new TestSuiteParser();
+
+            // data passed from the TestSuite level parser
             Dictionary<string, string> data;
+
+            // folder-level HTML source
             string html = HTML.FolderLevelPage.Base;
 
+            // build report for each input file
             foreach (string file in allFiles)
             {
-                data = fileParser.SetFiles(file, Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + ".html").BuildReport();
+                data = fileParser.SetFiles(file, Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + ".html").AddTopBar(true).BuildReport();
 
                 if (data != null)
                 {
@@ -58,9 +78,10 @@
                 Console.WriteLine("");
             }
 
-            Console.WriteLine("\nNUnitOrange master file created!");
-
+            // write the entire source with all fixture/test-suite level data row-wise
             File.WriteAllText(dir + "\\Index.html", html);
+
+            Console.WriteLine("\nNUnitOrange executive summary created: " + dir + "\\Index.html");
         }
     }
 }

@@ -5,8 +5,16 @@ using System.Text;
 
 namespace NUnitOrange.HTML
 {
+    /// <summary>
+    /// Contains summary for the entire test-suite level report
+    /// </summary>
     internal class TestSuiteLevelPage
     {
+        /// <summary>
+        /// Main source written to the test-suite level report
+        /// Fixture and Test blocks are written for each instance from the XML file
+        /// Topbar is added to the source only when the Folder level report is created
+        /// </summary>
         public static string Base
         {
             get
@@ -14,7 +22,7 @@ namespace NUnitOrange.HTML
                 return @"<!DOCTYPE html>
                 <html xmlns='http://www.w3.org/1999/xhtml' xml:lang='en'> 
                 <!--
-	                NUnit Orange Library v1.4 | http://relevantcodes.com/nunit-orange-nunit-html-report-generator/ | https://github.com/relevantcodes/
+	                NUnit Orange Library [TestSuite Summary] v2.0 | http://relevantcodes.com/nunit-orange-nunit-html-report-generator/ | https://github.com/relevantcodes/
                     Owners:  Anshoo Arora
                     Contributor:  Fabien Ruffin
                     Contributor:  LV Prasad
@@ -32,20 +40,23 @@ namespace NUnitOrange.HTML
 			                pre { background: none repeat scroll 0 0 #f5f6f8; color: #222; padding: 5px 10px; text-transform: none !important; white-space: pre-wrap; }
 			                #orange-container { margin: 0; width: 100%; }
 			                #header, #dashboard, #filters, #content { width: 100%; }
-			                .header, .dashboard, .content, .filters { margin: 0 auto; width: 1053px; }
+			                .header, .topbar, .dashboard, .content, .filters { margin: 0 auto; width: 1053px; }
 			                /*header*/
 			                #header { margin-bottom: 35px; }
+                            #topbar {background-color: #f4f4f4;padding: 7px 0 10px;}						
+                            .back {background-color: #5bc0de;color: #fff;border-radius: 2px;font-family: 'Source Sans Pro';font-size: 13px;padding: 2px 10px 4px;}
+                            .back:hover {color: #fff;text-decoration: none;}
 			                #title { font-size: 14px; margin-top: 30px; }
                             .title-orange { color: #ef5f3c; font-family: Montserrat; }
-			                .menu { float: right; font-size: 13px; margin-right: 5px; margin-top: -40px; text-transform: uppercase; }
-			                .menu li { cursor: pointer; display: inline-block; font-family: Montserrat; font-size: 12px; list-style: outside none none; margin-right: 5px; padding: 10px 14px 10px 0; }
+			                .menu { float: right; font-size: 13px; margin-right: 5px; margin-top: -40px; }
+			                .menu li { cursor: pointer; display: inline-block; font-size: 15px; list-style: outside none none; margin-right: 5px; padding: 10px 14px 10px 0; }
                             .selected { color: #ef5f3c; }
 			                /*dashboard*/
-			                #dashboard { background-color: #f9f9f9; border-bottom: 1px solid #ccc; padding: 40px 0; }
+			                #dashboard { background-color: #f9f9f9; border-bottom: 1px solid #ddd; padding: 40px 0; }
 			                #tabs-2 { display: none; }
 			                .summary-item { border: 1px solid #d3dee2; display: inline-block; margin: 10px 17px; padding: 25px; width: 184px; }
 			                .summary-item span { display: block; text-align: center; }
-			                .summary-value { color: #5a5a5a; font-family: Montserrat; font-size: 26px; }
+			                .summary-value { color: #454545; font-family: 'Source Sans Pro'; font-size: 30px; }
                             .summary-param { font-size: 14px; }
 			                #summary { float: left; margin: 20px 20px 0 20px; }
                             #tabs .simple-grey { border: 1px solid #b4bfc3; width: 80%; }
@@ -66,7 +77,7 @@ namespace NUnitOrange.HTML
 			                .fixtures { max-width: 1053px; }
 			                .fixture-container { border: 1px solid #b4bfc3; cursor: pointer; float: left; margin-bottom: 8px; height: 82px; width: 343px; }
 			                .fixture-name { float: left; font-size: 18px; margin-left: 15px; margin-top: 10px; max-width: 215px; word-break: break-all; }
-			                .fixture-result { border-radius: 0.25em; color: #fff !important; float: right; margin-right: 7px; margin-top: 10px; padding: 2px 9px; text-transform: capitalize !important; }
+			                .fixture-result { border-radius: 0.25em; color: #fff !important; float: right; margin-right: 7px; font-weight: 600; margin-top: 10px; padding: 2px 7px; text-transform: capitalize !important; }
                             .fixture-result.fail, .fixture-result.failed, .fixture-result.failure {background-color: #d9534f;}
                             .fixture-result.pass, .fixture-result.success, .fixture-result.passed {background-color: #5cb85c;}
 			                .fixture-result.error { color: tomato; }
@@ -95,6 +106,7 @@ namespace NUnitOrange.HTML
 	                <body>
 		                <div id='orange-container'>
 			                <div id='header'>
+                                <!--%TOPBAR%-->
 				                <div class='header'>
 					                <div id='title'>
 						                <i class='fa fa-desktop' style='margin-right:10px;'></i><span>NUnit<span class='title-orange'>Orange.</span></span>
@@ -336,6 +348,27 @@ namespace NUnitOrange.HTML
             }
         }
 
+        /// <summary>
+        /// Topbar is written to the source for Folder level summary
+        /// It adds a go-back link to navigate back to the Index page
+        /// </summary>
+        public static string Topbar
+        {
+            get
+            {
+                return @"<div id='topbar'>
+							<div class='topbar'>
+								<a class='back' href='Index.html'><i class='fa fa-chevron-left'></i> &nbsp; Executive Summary</a>
+							</div>
+						</div>";
+            }
+        }
+
+        /// <summary>
+        /// Fixture block
+        /// Box in which all tests will be created
+        /// It is masonry style and can be used as a toggle or accordion (default)
+        /// </summary>
         public static string Fixture
         {
             get
@@ -359,6 +392,10 @@ namespace NUnitOrange.HTML
             }
         }
 
+        /// <summary>
+        /// Test block
+        /// Each test is added as a row inside the Fixture container
+        /// </summary>
         public static string Test
         {
             get
