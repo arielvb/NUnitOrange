@@ -51,9 +51,9 @@
         /// <returns>TestSuiteParser</returns>
         public TestSuiteParser SetFiles(string NUnitResultFile, string OrangeFile)
         {
-            if (!File.Exists(NUnitResultFile) || Path.GetExtension(NUnitResultFile).ToLower() == "xml")
+            if (!File.Exists(NUnitResultFile) || Path.GetExtension(NUnitResultFile).ToLower().Contains("xml"))
             {
-                throw new Exception("[ERROR] Input file does not exist or is invalid: " + NUnitResultFile);
+                Console.WriteLine("[ERROR] Input file does not exist or is invalid: " + NUnitResultFile);
             }
 
             this.nunitResultFile = NUnitResultFile;
@@ -129,8 +129,8 @@
 
                 data.Add("Total", totalTests.ToString()); 
                 data.Add("Passed", passed.ToString());
-                data.Add("Failed", failed.ToString());
-                data.Add("Other", (inconclusive + skipped + errors).ToString());
+                data.Add("Failed", (failed + errors).ToString());
+                data.Add("Other", (inconclusive + skipped).ToString());
                 data.Add("Result", runResult);
                 data.Add("AssemblyName", name);
 

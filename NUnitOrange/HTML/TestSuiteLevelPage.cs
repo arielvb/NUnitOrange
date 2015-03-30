@@ -31,13 +31,13 @@ namespace NUnitOrange.HTML
 		                <title>NUnit Orange</title>
 		                <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Montserrat' rel='stylesheet' type='text/css' />
 		                <link href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet' />
-		                <link href='http://relevantcodes.com/Tools/NUnitOrange/bootstrap/bootstrap.min.css' rel='stylesheet' />
+		                <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css' rel='stylesheet'>
 		                <style type='text/css'>
                             html { overflow-y: scroll; }
-			                body { color: #222; font-family: 'Source Sans Pro', Verdana; font-size: 15px; margin: 0; }
+			                body { color: #222; font-family: 'Source Sans Pro', Verdana; font-size: 15px; margin: 0; line-height: 1.3; }
 			                a { color: inherit; text-decoration: none; }
                             select { font-family: 'Source Sans Pro'; margin-top: -4px; padding: 7px 10px; }
-			                pre { background: none repeat scroll 0 0 #f5f6f8; color: #222; padding: 5px 10px; text-transform: none !important; white-space: pre-wrap; }
+			                pre { background: none repeat scroll 0 0 #f5f6f8; border: 1px solid #ccc; color: #111; font-family: monospace,Consolas; margin-top: 15px; padding: 5px 10px; text-transform: none !important; white-space: pre-wrap; }
 			                #orange-container { margin: 0; width: 100%; }
 			                #header, #dashboard, #filters, #content { width: 100%; }
 			                .header, .topbar, .dashboard, .content, .filters { margin: 0 auto; width: 1053px; }
@@ -48,7 +48,7 @@ namespace NUnitOrange.HTML
                             .back:hover {color: #fff;text-decoration: none;}
 			                #title { font-size: 14px; margin-top: 30px; }
                             .title-orange { color: #ef5f3c; font-family: Montserrat; }
-			                .menu { float: right; font-size: 13px; margin-right: 5px; margin-top: -40px; }
+			                .menu { float: right; font-size: 13px; margin-right: 5px; margin-top: -25px; }
 			                .menu li { cursor: pointer; display: inline-block; font-size: 15px; list-style: outside none none; margin-right: 5px; padding: 10px 14px 10px 0; }
                             .selected { color: #ef5f3c; }
 			                /*dashboard*/

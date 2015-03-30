@@ -41,7 +41,15 @@
 
             if (args.Length == 2)
             {
-                new TestSuiteParser().SetFiles(args[0], args[1]).BuildReport();
+                if ((Path.GetExtension(args[0]).ToLower().Contains("xml")) && (Path.GetExtension(args[1]).ToLower().Contains("htm")))
+                {
+                    new TestSuiteParser().SetFiles(args[0], args[1]).BuildReport();
+                }
+                else
+                {
+                    Console.WriteLine("[ERROR] Invalid files specified.\n" + orangeUsage);
+                }
+
                 return;
             }
 

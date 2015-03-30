@@ -23,10 +23,10 @@
 		                        <title>NUnit Orange Executive Report</title>
 		                        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Montserrat' rel='stylesheet' type='text/css' />
 		                        <link href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet' />
-		                        <link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css'>
+		                        <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css' rel='stylesheet'>
 		                        <style type='text/css'>
 			                        html {overflow-y: scroll;}
-			                        body {font-family: 'Source Sans Pro', Arial;font-size: 15px;margin: 0;}
+			                        body {font-family: 'Source Sans Pro', Arial;font-size: 15px; line-height: 1.3; margin: 0;}
 			                        table {border-collapse: collapse;width: 100%;}
 			                        /*---:[ containers ]:---*/
 			                        #orange-container {margin: 0;padding: 0;width: 100%;}
@@ -35,7 +35,7 @@
 			                        .header { font-size: 14px; margin-top: -1px; padding-bottom: 15px;}
 			                        #title { margin-top: 30px; }
                                     .title-orange { color: #ef5f3c; font-family: Montserrat; }
-			                        .header .name {color: #bbb;float: right;font-size: 15px; margin-top: -20px;}
+			                        .header .name {color: #bbb;float: right;font-size: 15px; margin-top: -18px;}
 			                        /*---:[ dashboard ]:---*/
 			                        #dashboard {background: #f9f9f9;border-bottom: 1px solid #ddd;margin: 20px 0 40px;}
 			                        .dashboard {padding: 20px 0 0;text-align: center;}
