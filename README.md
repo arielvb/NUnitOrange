@@ -1,4 +1,4 @@
-NUnitOrange creates masonry style HTML reports for NUnit. Its a simple Console application that creates easy to use, attractive dashboard. It shows the XML output from NUnit in a presentable manner with charts, graphs and tables. View <a href='/Tools/NUnitOrange/reports/Index.html'>folder-level sample</a> and <a href='/Tools/NUnitOrange/reports/TestResult.html'>test-suite level</a> samples from the following <a href='/Tools/NUnitOrange/TestResult.xml'>NUnit XML report</a>.
+NUnitOrange creates masonry style HTML reports for NUnit. Its a simple Console application that creates easy to use, attractive dashboard. It shows the XML output from NUnit in a presentable manner with charts, graphs and tables. View <a href='http://relevantcodes.com/Tools/NUnitOrange/reports/Index.html'>folder-level sample</a> and <a href='http://relevantcodes.com/Tools/NUnitOrange/reports/TestResult.html'>test-suite level</a> samples from the following <a href='http://relevantcodes.com/Tools/NUnitOrange/TestResult.xml'>NUnit XML report</a>.
 
 
 ### Download Exe / NuGet
