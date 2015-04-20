@@ -33,13 +33,13 @@ nunitorange "C:\InputXMLs\TestResult.xml" "C:\InputXMLs\TestResult.html"
 
 Below is a snapshot of the folder-level summary, which you can view live <a href='http://relevantcodes.com/Tools/NUnitOrange/reports/Index.html'>here</a>:
 
-![](http://relevantcodes.com/Tools/NUnitOrange/folder.png)
+![](http://relevantcodes.com/Tools/NUnitOrange/folder1.png)
 
 ##### TestSuite-level
 
 Below is a snapshot of the testsuite-level summary, which you can view live <a href='http://relevantcodes.com/Tools/NUnitOrange/reports/NUnit-TestResult.html'>here</a>.
 
-![](http://relevantcodes.com/Tools/NUnitOrange/testsuite.png)
+![](http://relevantcodes.com/Tools/NUnitOrange/testsuite1.png)
 
 
 ### Software License Agreement (BSD License)
