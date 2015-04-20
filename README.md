@@ -37,7 +37,7 @@ Below is a snapshot of the folder-level summary, which you can view live <a href
 
 ##### TestSuite-level
 
-Below is a snapshot of the testsuite-level summary, which you can view live <a href='http://relevantcodes.com/Tools/NUnitOrange/reports/TestResult.html'>here</a>.
+Below is a snapshot of the testsuite-level summary, which you can view live <a href='http://relevantcodes.com/Tools/NUnitOrange/reports/NUnit-TestResult.html'>here</a>.
 
 ![](http://relevantcodes.com/Tools/NUnitOrange/testsuite.png)
 
