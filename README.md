@@ -12,6 +12,9 @@ To build a summary for all NUnit TestResult files, simply open cmd.exe and point
 nunitorange "path-to-folder"
 nunitorange "C:\InputXMLs"
 nunitorange .  // for current folder
+
+nunitorange "input-folder" "output-folder"
+nunitorange "C:\InputXMLs" "C:\OutputXMLs"
 ```
 
 ### Usage: Building TestSuite-Level Summary

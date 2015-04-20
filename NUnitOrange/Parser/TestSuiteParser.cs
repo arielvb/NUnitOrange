@@ -7,7 +7,7 @@
     using System.Linq;
     using System.Xml;
     using System.Text.RegularExpressions;
-    
+
     /// <summary>
     /// TestSuite level parser and file builder
     /// </summary>
@@ -16,7 +16,7 @@
         /// <summary>
         /// XmlDocument instance
         /// </summary>
-        private XmlDocument doc; 
+        private XmlDocument doc;
 
         /// <summary>
         /// The input file from NUnit TestResult.xml
@@ -51,7 +51,7 @@
         /// <returns>TestSuiteParser</returns>
         public TestSuiteParser SetFiles(string NUnitResultFile, string OrangeFile)
         {
-            if (!File.Exists(NUnitResultFile) || Path.GetExtension(NUnitResultFile).ToLower().Contains("xml"))
+            if (!File.Exists(NUnitResultFile) || !Path.GetExtension(NUnitResultFile).ToLower().Contains("xml"))
             {
                 Console.WriteLine("[ERROR] Input file does not exist or is invalid: " + NUnitResultFile);
             }
@@ -67,7 +67,7 @@
             }
             catch (Exception)
             {
-                Console.WriteLine("\n[ERROR] Skipping " + NUnitResultFile + ". It is not a valid NUnit TestResult XML file.");
+                Console.WriteLine("[ERROR] Skipping " + NUnitResultFile + ". It is not a valid NUnit TestResult XML file.");
             }
 
             return this;
@@ -108,6 +108,9 @@
 
             Console.WriteLine("\n[INFO] Processing file '" + nunitResultFile + "'..");
 
+            // base TestSuite html
+            string html = HTML.TestSuiteLevelPage.Base;
+
             // get total count of tests from the input file
             int totalTests = doc.GetElementsByTagName("test-case").Count;
 
@@ -117,7 +120,6 @@
                 Console.WriteLine("[INFO] Processing root and test-suite elements...");
 
                 // pull values from XML source
-                string html = HTML.TestSuiteLevelPage.Base;
                 int passed = doc.SelectNodes(".//test-case[@result='Success' or @result='Passed']").Count;
                 int failed = doc.SelectNodes(".//test-case[@result='Failed' or @result='Failure']").Count;
                 int inconclusive = doc.SelectNodes(".//test-case[@result='Inconclusive' or @result='NotRunnable']").Count;
@@ -127,7 +129,7 @@
                 string name = doc.SelectNodes("//test-suite")[0].Attributes["name"].InnerText;
                 string timeTaken = "";
 
-                data.Add("Total", totalTests.ToString()); 
+                data.Add("Total", totalTests.ToString());
                 data.Add("Passed", passed.ToString());
                 data.Add("Failed", (failed + errors).ToString());
                 data.Add("Other", (inconclusive + skipped).ToString());
@@ -174,8 +176,38 @@
             }
             else
             {
-                Console.WriteLine("[INFO] There are no tests present in your input XML. No report will be created.");
-                return null;
+                Console.Write("There are no tests available in this file.");
+
+                try
+                {
+                    // replace OPTIONALCSS here with css to hide elements
+                    html = html.Replace(OrangeHelper.MarkupFlag("insertNoTestsMessage"), HTML.TestSuiteLevelPage.NoTestsMessage)
+                                .Replace("/*%OPTIONALCSS%*/", HTML.TestSuiteLevelPage.NoTestsCSS)
+                                .Replace(OrangeHelper.MarkupFlag("inXml"), Path.GetFileName(nunitResultFile));
+
+                    // add topbar for folder-level report to allow backward navigation to Index.html
+                    if (addTopbar)
+                    {
+                        html = html.Replace(OrangeHelper.MarkupFlag("topbar"), HTML.TestSuiteLevelPage.Topbar);
+                    }
+
+                    // finally, save the source as the output file
+                    File.WriteAllText(orangeFile, html);
+
+                    data.Add("Total", "0");
+                    data.Add("Passed", "0");
+                    data.Add("Failed", "0");
+                    data.Add("Other", "0");
+                    data.Add("Result", "Passed");
+                    data.Add("AssemblyName", doc.SelectNodes("//test-suite")[0].Attributes["name"].InnerText);
+
+                    return data;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Something weird happened: " + ex.Message);
+                    return null;
+                }
             }
 
             return data;
@@ -190,7 +222,8 @@
         {
             Console.WriteLine("[INFO] Building fixture blocks...");
 
-            string pre = null;
+            string errorMsg = null;
+            string descMsg = null;
             ArrayList fixtureStatus = new ArrayList();
             XmlNodeList testSuite = doc.SelectNodes("//test-suite[@type='TestFixture']");
             int testCount = 0;
@@ -203,29 +236,56 @@
                                     .Replace(OrangeHelper.MarkupFlag("insertfixture"), HTML.TestSuiteLevelPage.Fixture)
                                     .Replace(OrangeHelper.MarkupFlag("fixturename"), suite.Attributes["name"].InnerText);
 
+                if (suite.Attributes["start-time"] != null && suite.Attributes["end-time"] != null)
+                {
+                    html = html.Replace(OrangeHelper.MarkupFlag("fixtureStartedAt"), suite.Attributes["start-time"].InnerText.Replace("Z", ""))
+                               .Replace(OrangeHelper.MarkupFlag("fixtureEndedAt"), suite.Attributes["end-time"].InnerText.Replace("Z", ""))
+                               .Replace(OrangeHelper.MarkupFlag("footerDisplay"), "")
+                               .Replace(OrangeHelper.MarkupFlag("fixtureStartedAtDisplay"), "")
+                               .Replace(OrangeHelper.MarkupFlag("fixtureEndedAtDisplay"), "");
+                }
+                else if (suite.Attributes["time"] != null)
+                {
+                    html = html.Replace(OrangeHelper.MarkupFlag("fixtureStartedAt"), suite.Attributes["time"].InnerText)
+                        .Replace(OrangeHelper.MarkupFlag("footerDisplay"), "")
+                        .Replace(OrangeHelper.MarkupFlag("fixtureStartedAtDisplay"), "")
+                        .Replace(OrangeHelper.MarkupFlag("fixtureEndedAtDisplay"), "style='display:none;'");
+                }
+                else
+                {
+                    html = html.Replace(OrangeHelper.MarkupFlag("footerDisplay"), "style='display:none;'")
+                        .Replace(OrangeHelper.MarkupFlag("fixtureStartedAtDisplay"), "style='display:none;'")
+                        .Replace(OrangeHelper.MarkupFlag("fixtureEndedAtDisplay"), "style='display:none;'");
+                }
+
                 fixtureStatus.Clear();
 
                 // add each test of the test-suite
                 foreach (XmlNode testcase in suite.SelectNodes(".//test-case"))
                 {
                     fixtureStatus.Add(testcase.Attributes["result"].InnerText);
-                    pre = "";
+                    errorMsg = descMsg = "";
 
                     if (testcase.SelectNodes(".//message").Count == 1)
                     {
-                        pre = testcase.SelectNodes(".//message").Count == 1 ? "<pre>" + testcase.SelectNodes(".//message")[0].InnerText : "";
-                        pre += testcase.SelectNodes(".//stack-trace").Count == 1 ? " -> " + testcase.SelectNodes(".//stack-trace")[0].InnerText.Replace("\r", "").Replace("\n", "") : "";
-                        pre += "</pre>";
+                        errorMsg = testcase.SelectNodes(".//message").Count == 1 ? "<pre>" + testcase.SelectNodes(".//message")[0].InnerText : "";
+                        errorMsg += testcase.SelectNodes(".//stack-trace").Count == 1 ? " -> " + testcase.SelectNodes(".//stack-trace")[0].InnerText.Replace("\r", "").Replace("\n", "") : "";
+                        errorMsg += "</pre>";
+                        errorMsg = errorMsg == "<pre></pre>" ? "" : errorMsg;
+                    }
 
-                        if (pre == "<pre></pre>")
-                            pre = "";
+                    if (testcase.SelectNodes(".//property[@name='Description']").Count == 1)
+                    {
+                        descMsg += testcase.SelectNodes(".//property[@name='Description']").Count == 1 ? "<p class='description'>Description: " + testcase.SelectNodes(".//property[@name='Description']")[0].Attributes["value"].InnerText : "";
+                        descMsg += "</p>";
+                        descMsg = descMsg == "<p class='description'>Description: </p>" ? "" : descMsg;
                     }
 
                     // test-level replacements
                     html = html.Replace(OrangeHelper.MarkupFlag("inserttest"), HTML.TestSuiteLevelPage.Test)
                             .Replace(OrangeHelper.MarkupFlag("testname"), testcase.Attributes["name"].InnerText.Replace("<", "[").Replace(">", "]"))
                             .Replace(OrangeHelper.MarkupFlag("teststatus"), testcase.Attributes["result"].InnerText.ToLower())
-                            .Replace(OrangeHelper.MarkupFlag("teststatusmsg"), pre);
+                            .Replace(OrangeHelper.MarkupFlag("teststatusmsg"), descMsg + errorMsg);
 
                     Console.Write("\r{0} tests processed...", ++testCount);
                 }
@@ -243,6 +303,6 @@
             File.WriteAllText(orangeFile, html);
         }
 
-        public TestSuiteParser() {}
+        public TestSuiteParser() { }
     }
 }

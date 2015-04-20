@@ -11,7 +11,7 @@
         /// <summary>
         /// NUnitOrange usage
         /// </summary>
-        private static string orangeUsage = "[INFO] Usage 1:  NUnitOrange \"path-to-folder\"\n[INFO] Usage 2:  NUnitOrange \"input.xml\" \"output.html\"";
+        private static string orangeUsage = "[INFO] Usage 1:  NUnitOrange \"path-to-folder\"\n[INFO] Usage 2:  NUnitOrange \"input-folder\" \"output-folder\"\n[INFO] Usage 3:  NUnitOrange \"input.xml\" \"output.html\"";
 
         /// <summary>
         /// Entry point
@@ -39,11 +39,20 @@
                 }
             }
 
+            for (int ix = 0; ix < args.Length; ix++)
+            {
+                args[ix] = args[ix].Replace('"', '\\');
+            }
+
             if (args.Length == 2)
             {
                 if ((Path.GetExtension(args[0]).ToLower().Contains("xml")) && (Path.GetExtension(args[1]).ToLower().Contains("htm")))
                 {
                     new TestSuiteParser().SetFiles(args[0], args[1]).BuildReport();
+                }
+                else if (Directory.Exists(args[0]) && Directory.Exists(args[1]))
+                {
+                    new FolderParser().SetFolder(args[0], args[1]).BuildReport();
                 }
                 else
                 {

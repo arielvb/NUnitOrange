@@ -16,7 +16,13 @@
         /// <summary>
         /// Path to the directory where all XML files are kept
         /// </summary>
-        private string dir = "";
+        private string inDir = "";
+
+        /// <summary>
+        /// Path to the directory where all HTML files will be stored
+        /// </summary>
+        private string outDir = "";
+
 
         /// <summary>
         /// Set the Target folder where all XML files are kept
@@ -25,8 +31,22 @@
         /// <returns>FolderParser</returns>
         public FolderParser SetFolder(string TargetDirectory)
         {
-            this.dir = TargetDirectory;
-            
+            inDir = TargetDirectory;
+            outDir = TargetDirectory;
+
+            return this;
+        }
+
+        /// <summary>
+        /// Set the Target folder where all XML files are kept
+        /// </summary>
+        /// <param name="TargetDirectory"></param>
+        /// <returns>FolderParser</returns>
+        public FolderParser SetFolder(string TargetDirectory, string ResultsDirectory)
+        {
+            inDir = TargetDirectory;
+            outDir = ResultsDirectory;
+
             return this;
         }
 
@@ -35,7 +55,7 @@
         /// </summary>
         public void BuildReport()
         {
-            List<string> allFiles = Directory.GetFiles(dir, "*.*", SearchOption.TopDirectoryOnly)
+            List<string> allFiles = Directory.GetFiles(inDir, "*.*", SearchOption.TopDirectoryOnly)
                             .Where(s => s.ToLower().EndsWith("xml"))
                             .ToList();
 
@@ -57,31 +77,47 @@
             // build report for each input file
             foreach (string file in allFiles)
             {
-                data = fileParser.SetFiles(file, Path.GetDirectoryName(file) + "\\" + Path.GetFileNameWithoutExtension(file) + ".html").AddTopBar(true).BuildReport();
+                data = fileParser.SetFiles(file, outDir + "\\" + Path.GetFileNameWithoutExtension(file) + ".html").AddTopBar(true).BuildReport();
 
                 if (data != null)
                 {
-                    html = html.Replace(OrangeHelper.MarkupFlag("insertResult"), HTML.FolderLevelPage.Row)
-                                .Replace(OrangeHelper.MarkupFlag("fullFilename"), Path.GetFileNameWithoutExtension(file) + ".html")
-                                .Replace(OrangeHelper.MarkupFlag("filename"), Path.GetFileNameWithoutExtension(file))
-                                .Replace(OrangeHelper.MarkupFlag("assembly"), Path.GetFileName(data["AssemblyName"]))
-                                .Replace(OrangeHelper.MarkupFlag("runresult"), data["Result"].ToLower())
-                                .Replace(OrangeHelper.MarkupFlag("totalTests"), data["Total"])
-                                .Replace(OrangeHelper.MarkupFlag("totalPassed"), data["Passed"])
-                                .Replace(OrangeHelper.MarkupFlag("totalFailed"), data["Failed"])
-                                .Replace(OrangeHelper.MarkupFlag("allOtherTests"), data["Other"])
-                                .Replace(OrangeHelper.MarkupFlag("passedPercentage"), (Convert.ToInt32(data["Passed"]) * 100 / Convert.ToInt32(data["Total"])).ToString())
-                                .Replace(OrangeHelper.MarkupFlag("failedPercentage"), (Convert.ToInt32(data["Failed"]) * 100 / Convert.ToInt32(data["Total"])).ToString())
-                                .Replace(OrangeHelper.MarkupFlag("othersPercentage"), (Convert.ToInt32(data["Other"]) * 100 / Convert.ToInt32(data["Total"])).ToString());
+                    if (data["Total"] == "0")
+                    {
+                        html = html.Replace(OrangeHelper.MarkupFlag("insertResult"), HTML.FolderLevelPage.Row)
+                                    .Replace(OrangeHelper.MarkupFlag("fullFilename"), Path.GetFileNameWithoutExtension(file) + ".html")
+                                    .Replace(OrangeHelper.MarkupFlag("filename"), Path.GetFileNameWithoutExtension(file))
+                                    .Replace(OrangeHelper.MarkupFlag("assembly"), Path.GetFileName(data["AssemblyName"]))
+                                    .Replace(OrangeHelper.MarkupFlag("runresult"), data["Result"].ToLower())
+                                    .Replace(OrangeHelper.MarkupFlag("totalTests"), data["Total"])
+                                    .Replace(OrangeHelper.MarkupFlag("totalPassed"), data["Passed"])
+                                    .Replace(OrangeHelper.MarkupFlag("totalFailed"), data["Failed"])
+                                    .Replace(OrangeHelper.MarkupFlag("allOtherTests"), data["Other"])
+                                    .Replace(OrangeHelper.MarkupFlag("passedPercentage"), "0")
+                                    .Replace(OrangeHelper.MarkupFlag("failedPercentage"), "0")
+                                    .Replace(OrangeHelper.MarkupFlag("othersPercentage"), "0");
+                    }
+                    else
+                    {
+                        html = html.Replace(OrangeHelper.MarkupFlag("insertResult"), HTML.FolderLevelPage.Row)
+                                    .Replace(OrangeHelper.MarkupFlag("fullFilename"), Path.GetFileNameWithoutExtension(file) + ".html")
+                                    .Replace(OrangeHelper.MarkupFlag("filename"), Path.GetFileNameWithoutExtension(file))
+                                    .Replace(OrangeHelper.MarkupFlag("assembly"), Path.GetFileName(data["AssemblyName"]))
+                                    .Replace(OrangeHelper.MarkupFlag("runresult"), data["Result"].ToLower())
+                                    .Replace(OrangeHelper.MarkupFlag("totalTests"), data["Total"])
+                                    .Replace(OrangeHelper.MarkupFlag("totalPassed"), data["Passed"])
+                                    .Replace(OrangeHelper.MarkupFlag("totalFailed"), data["Failed"])
+                                    .Replace(OrangeHelper.MarkupFlag("allOtherTests"), data["Other"])
+                                    .Replace(OrangeHelper.MarkupFlag("passedPercentage"), (Convert.ToInt32(data["Passed"]) * 100 / Convert.ToInt32(data["Total"])).ToString())
+                                    .Replace(OrangeHelper.MarkupFlag("failedPercentage"), (Convert.ToInt32(data["Failed"]) * 100 / Convert.ToInt32(data["Total"])).ToString())
+                                    .Replace(OrangeHelper.MarkupFlag("othersPercentage"), (Convert.ToInt32(data["Other"]) * 100 / Convert.ToInt32(data["Total"])).ToString());
+                    }
                 }
-
-                Console.WriteLine("");
             }
 
             // write the entire source with all fixture/test-suite level data row-wise
-            File.WriteAllText(dir + "\\Index.html", html);
+            File.WriteAllText(outDir + "\\Index.html", html);
 
-            Console.WriteLine("\nNUnitOrange executive summary created: " + dir + "\\Index.html");
+            Console.WriteLine("\nNUnitOrange executive summary created: " + outDir + "\\Index.html");
         }
     }
 }

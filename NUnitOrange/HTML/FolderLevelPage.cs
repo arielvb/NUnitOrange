@@ -21,20 +21,22 @@
                         --> 
 	                        <head>
 		                        <title>NUnit Orange Executive Report</title>
-		                        <link href='http://fonts.googleapis.com/css?family=Source+Sans+Pro:400,600|Montserrat' rel='stylesheet' type='text/css' />
+		                        <link href='http://fonts.googleapis.com/css?family=Open+Sans:300,400,600' rel='stylesheet' type='text/css' />
 		                        <link href='http://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css' rel='stylesheet' />
 		                        <link href='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css' rel='stylesheet'>
 		                        <style type='text/css'>
 			                        html {overflow-y: scroll;}
-			                        body {font-family: 'Source Sans Pro', Arial;font-size: 15px; line-height: 1.3; margin: 0;}
+			                        body {font-family: 'Open Sans', Arial;font-size: 14px; line-height: 1.3; margin: 0;}
 			                        table {border-collapse: collapse;width: 100%;}
+                                    a {color: #1366d7;}
 			                        /*---:[ containers ]:---*/
 			                        #orange-container {margin: 0;padding: 0;width: 100%;}
+                                    #content {padding-bottom: 100px;}
 			                        .header, .dashboard, .content {margin: 0 auto;width: 1053px;}
 			                        /*---:[ header ]:---*/
-			                        .header { font-size: 14px; margin-top: -1px; padding-bottom: 15px;}
+			                        .header { font-size: 14px; font-weight: 300; margin-top: -1px; padding-bottom: 15px;}
 			                        #title { margin-top: 30px; }
-                                    .title-orange { color: #ef5f3c; font-family: Montserrat; }
+                                    .title-orange { color: #ef5f3c; font-weight: 600; }
 			                        .header .name {color: #bbb;float: right;font-size: 15px; margin-top: -18px;}
 			                        /*---:[ dashboard ]:---*/
 			                        #dashboard {background: #f9f9f9;border-bottom: 1px solid #ddd;margin: 20px 0 40px;}
@@ -46,11 +48,11 @@
 			                        .orange-table th {background-color: #444;color: #fff;font-size: 13px;padding: 6px 14px;text-align: left;text-transform: uppercase;}
 			                        .orange-table td {padding: 17px 12px;word-break: break-all;word-wrap: break-word;}
 			                        .orange-table td:last-child {min-width: 250px;}
-			                        .totals-row td {font-size: 14px;padding: 8px 12px;}
+			                        .totals-row td {font-size: 13px;padding: 8px 12px;}
 			                        .progress {margin-bottom: 0;}
-			                        .label {font-size: 13px;font-weight:600;padding: 2px 7px;text-transform:capitalize;}
-			                        .failed > .label, .failure > .label {background-color: #d9534f;}
-			                        .passed > .label, .success > .label {background-color: #5cb85c;}
+			                        .label {font-size: 12px;font-weight:600;padding: 2px 7px;text-transform:capitalize;}
+			                        .failed > .label, .failure > .label {background-color: #eb4549;}
+			                        .passed > .label, .success > .label {background-color: #32cd32;}
 		                        </style>
 	                        </head>
 	                        <body>
@@ -59,7 +61,7 @@
 				                        <div id='header'>
 					                        <div class='header'>
 						                        <div id='title'>
-							                        <i class='fa fa-desktop' style='margin-right:10px;'></i><span>NUnit<span class='title-orange'>Orange.</span></span>
+							                        <span>NUnit<span class='title-orange'>Orange.</span></span>
 						                        </div>
 						                        <div class='name'>
 							                        Folder Summary
@@ -132,10 +134,10 @@
 				                        var options = {
 				                          backgroundColor: { fill:'transparent' },
 				                          chartArea: {'width': '65%', 'height': '65%'},
-				                          colors: ['green', 'tomato', 'orange', 'red', '#999'],
+				                          colors: ['#00af00', 'tomato', 'orange', 'red', '#999'],
 				                          fontSize: '11',
 				                          height: 275,
-				                          pieHole: 0.6,
+				                          is3D: true,
 				                          pieSliceText: 'value', 
 				                          title: 'OVERALL SUMMARY', 
 				                          width: 450
@@ -153,10 +155,10 @@
 				                        var options = {
 				                          backgroundColor: { fill:'transparent' },
 				                          chartArea: {'width': '65%', 'height': '65%'},
-				                          colors: ['green', 'tomato', 'orange', 'red', '#999'],
+				                          colors: ['#00af00', 'red', '#aaa'],
 				                          fontSize: '11',
 				                          height: 275,
-				                          pieHole: 0.6,
+				                          is3D: true,
 				                          pieSliceText: 'value', 
 				                          title: 'TEST SUMMARY', 
 				                          width: 450

@@ -12,8 +12,8 @@
         {
             switch (status.ToLower())
             {
-                case "passed": return "fa-check";
-                case "failed": return "fa-times";
+                case "passed": return "fa-check-circle-o";
+                case "failed": return "fa-times-circle";
                 case "skipped": return "fa-angle-double-right";
                 case "inconclusive": return "fa-question";
                 default: return "info";
