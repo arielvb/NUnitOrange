@@ -77,7 +77,7 @@
             // build report for each input file
             foreach (string file in allFiles)
             {
-                data = fileParser.SetFiles(file, outDir + "\\" + Path.GetFileNameWithoutExtension(file) + ".html").AddTopBar(true).BuildReport();
+                data = fileParser.SetFiles(file, Path.Combine(outDir, Path.GetFileNameWithoutExtension(file) + ".html")).AddTopBar(true).BuildReport();
 
                 if (data != null)
                 {
@@ -113,11 +113,11 @@
                     }
                 }
             }
-
+            string outputfile = Path.Combine(outDir, "Index.html");
             // write the entire source with all fixture/test-suite level data row-wise
-            File.WriteAllText(outDir + "\\Index.html", html);
+            File.WriteAllText(outputfile, html);
 
-            Console.WriteLine("\nNUnitOrange executive summary created: " + outDir + "\\Index.html");
+            Console.WriteLine("\nNUnitOrange executive summary created: " + outputfile);
         }
     }
 }
